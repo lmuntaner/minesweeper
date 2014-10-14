@@ -20,6 +20,7 @@ class Minesweeper
   
   def run
     until @board.won? || @board.lost?
+      system("clear")
       board.display
       save_request
       board.flag_message
