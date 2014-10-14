@@ -1,3 +1,5 @@
+require 'colorize'
+
 class Tile
   attr_accessor :position
   attr_reader :board
@@ -30,14 +32,6 @@ class Tile
   end
   
   def count_bombs
-    # neighbors = get_neighbors
-    # bombs = 0
-    #
-    # neighbors.each do |neighbor|
-    #   bombs += 1 if board[neighbor].bomb?
-    # end
-    #
-    # bombs
     neighbors.count{ |neighbor| neighbor.bomb? }
   end
   
@@ -68,14 +62,30 @@ class Tile
     true
   end
   
+  def display_tile(str)
+    case str
+    when 'F'
+      ' F '.colorize(:red)
+    when '*'
+      color = position.inject(&:+).even? ? :light_black : :black
+      '   '.colorize( :background => color)        
+    when 'B'
+      ' * '.colorize( :background => :red)
+    when '_'
+      '   '.colorize( :background => :light_blue)
+    else
+      " #{str} ".colorize( :background => :light_blue)
+    end
+  end
+  
   def display
-    return 'F' if flagged?
-    return '*' unless revealed?
+    return display_tile('F') if flagged?
+    return display_tile('*') unless revealed?
     if bomb?
-      'B'
+      display_tile('B')
     else
       bombs = count_bombs
-      bombs == 0 ? '_' : bombs.to_s
+      bombs == 0 ? display_tile('_') : display_tile(bombs.to_s)
     end
   end
 end

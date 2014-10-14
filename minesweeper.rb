@@ -1,6 +1,7 @@
 require './tile'
 require './mineboard'
 require 'yaml'
+require 'colorize'
 
 class Minesweeper
   attr_accessor :board, :total_tiles, :num_bombs
@@ -20,9 +21,8 @@ class Minesweeper
   
   def run
     until @board.won? || @board.lost?
-      system("clear")
       board.display
-      save_request
+      # save_request
       board.flag_message
       flagged = ask_flag
       position = ask_position

@@ -1,3 +1,4 @@
+
 class Mineboard
     attr_accessor :grid, :num_bombs
   
@@ -65,13 +66,14 @@ class Mineboard
   end
   
   def display
-    puts "  | #{(0..8).to_a.join(" | ")}"
+    system("clear")
+    puts "   #{(0..8).to_a.join("  ")}"
     @grid.each_with_index do |row, index|
-      row_array = ["#{index}"]
+      row_array = ["#{index} "]
       row.each do |tile|
         row_array << tile.display
       end
-      puts row_array.join(' | ')
+      puts row_array.join('')
     end
   end
   
