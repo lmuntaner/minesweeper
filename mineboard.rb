@@ -69,7 +69,7 @@ class Mineboard
   
   def move_cursor
     input = STDIN.getch
-    p input
+
     case input
     when "a"
       @pointer_pos[1] -= 1
