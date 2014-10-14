@@ -83,6 +83,8 @@ class Mineboard
       flag(pointer_pos)
     when "r"
       reveal(pointer_pos)
+    when "e"
+      exit
     end
   end
   
