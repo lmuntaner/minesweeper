@@ -1,7 +1,6 @@
 require './tile'
 require './mineboard'
 require 'yaml'
-require 'colorize'
 
 class Minesweeper
   attr_accessor :board, :total_tiles, :num_bombs
@@ -22,18 +21,10 @@ class Minesweeper
   def run
     until @board.won? || @board.lost?
       board.display
-      # save_request
-      board.flag_message
-      flagged = ask_flag
-      position = ask_position
-      if flagged == 1
-        board.flag(position)
-      else
-        board.reveal(position)
-      end
+      board.move_cursor
     end
     
-    display_end  
+    display_end
   end
   
   def save(filename)
@@ -54,9 +45,9 @@ class Minesweeper
     won_text = 'Congratulations!! You won!!'
     lost_text = 'You stepped on a bomb!! Game over.'
     text = @board.won? ? won_text : lost_text
-    puts text
     board.reveal_all
     board.display
+    puts text
   end
   
   def ask_flag

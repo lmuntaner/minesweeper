@@ -62,30 +62,36 @@ class Tile
     true
   end
   
-  def display_tile(str)
+  def display_tile(str, pointer)
+    background = pointer ? :white : nil
     case str
     when 'F'
-      ' F '.colorize(:red)
+      background ||= :blue
+      ' F '.colorize(:color => :red, :background => background)
     when '*'
-      color = position.inject(&:+).even? ? :light_black : :black
-      '   '.colorize( :background => color)        
+      background ||= position.inject(&:+).even? ? :light_black : :black
+      '   '.colorize( :background => background)        
     when 'B'
-      ' * '.colorize( :background => :red)
+      background ||= :red
+      ' * '.colorize( :background => background)
     when '_'
-      '   '.colorize( :background => :light_blue)
+      background ||= :light_white
+      '   '.colorize( :background => background)
     else
-      " #{str} ".colorize( :background => :light_blue)
+      background ||= :light_white
+      " #{str} ".colorize( :background => background)
     end
   end
   
-  def display
-    return display_tile('F') if flagged?
-    return display_tile('*') unless revealed?
+  def display(pointer_pos)
+    cursor = (pointer_pos == position)
+    return display_tile('F', cursor) if flagged?
+    return display_tile('*', cursor) unless revealed?
     if bomb?
-      display_tile('B')
+      display_tile('B', cursor)
     else
       bombs = count_bombs
-      bombs == 0 ? display_tile('_') : display_tile(bombs.to_s)
+      bombs == 0 ? display_tile('_', cursor) : display_tile(bombs.to_s, cursor)
     end
   end
 end

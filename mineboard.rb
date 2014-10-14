@@ -1,11 +1,13 @@
+require 'io/console'
 
 class Mineboard
-    attr_accessor :grid, :num_bombs
+    attr_accessor :grid, :num_bombs, :pointer_pos
   
   def initialize(rows = 9, cols = 9, num_bombs = 9)
     @grid = Array.new(rows) { Array.new(cols) }
     @num_bombs = num_bombs
     @total_tiles = rows * cols
+    @pointer_pos = [0, 0]
     generate_tiles
   end
   
@@ -30,7 +32,7 @@ class Mineboard
   end
   
   def flag_count
-    @grid.flatten.count &:flagged? 
+    @grid.flatten.count &:flagged?
   end
   
   def generate_bomb_pos
@@ -65,13 +67,32 @@ class Mineboard
     puts "You have #{num_bombs - flag_count} tiles left to flag."
   end
   
+  def move_cursor
+    input = STDIN.getch
+    p input
+    case input
+    when "a"
+      @pointer_pos[1] -= 1
+    when "d"
+      @pointer_pos[1] += 1
+    when "s"
+      @pointer_pos[0] += 1
+    when "w"
+      @pointer_pos[0] -= 1
+    when "f"
+      flag(pointer_pos)
+    when "r"
+      reveal(pointer_pos)
+    end
+  end
+  
   def display
     system("clear")
     puts "   #{(0..8).to_a.join("  ")}"
     @grid.each_with_index do |row, index|
       row_array = ["#{index} "]
       row.each do |tile|
-        row_array << tile.display
+        row_array << tile.display(@pointer_pos)
       end
       puts row_array.join('')
     end
